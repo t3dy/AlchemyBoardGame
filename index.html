@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solo Alchemy Lab</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;700&family=Metamorphous&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Top Status Bar -->
+        <header id="status-bar">
+            <div class="stat">🪙 <span id="gold">5</span></div>
+            <div class="stat">🧂 <span id="salts">2</span></div>
+            <div class="stat">⚗️ <span id="elixir">0</span></div>
+            <div class="stat">📈 <span id="productivity">0</span></div>
+            <div class="stat">🧱 <span id="stability">5</span></div>
+            <div class="stat">Alchemist: <span id="alchemist-state">🟢</span></div>
+        </header>
+
+        <main id="main-area">
+            <!-- Center Area: Lab Grid -->
+            <section id="lab-grid-container">
+                <div id="lab-grid">
+                    <!-- 3x3 Tiles will be generated here -->
+                </div>
+            </section>
+
+            <!-- Right Side: Card Display Area -->
+            <aside id="card-panel">
+                <div id="card-display">
+                    <h2 id="card-title">Laboratory Ready</h2>
+                    <p id="card-text">Begin your work by selecting an action below.</p>
+                    <button id="resolve-btn" class="hidden">Resolve</button>
+                    <button id="recover-btn" class="hidden">Recover</button>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Bottom Area: Shop and Actions -->
+        <footer id="controls">
+            <section id="shop">
+                <button class="shop-btn" id="buy-furnace" onclick="purchaseFurniture('furnace')">
+                    🔥 Furnace (3)
+                </button>
+                <button class="shop-btn" id="buy-alembic" onclick="purchaseFurniture('alembic')">
+                    🧪 Alembic (2)
+                </button>
+                <button class="shop-btn" id="buy-assay" onclick="purchaseFurniture('assay')">
+                    ⚒️ Assay (2)
+                </button>
+            </section>
+            
+            <section id="actions">
+                <button id="safe-btn" onclick="takeAction('safe')">Play It Safe</button>
+                <button id="push-btn" onclick="takeAction('push')">Push Myself</button>
+            </section>
+        </footer>
+
+        <!-- Overlays -->
+        <div id="overlay" class="hidden">
+            <div id="overlay-content">
+                <h1 id="overlay-title"></h1>
+                <p id="overlay-message"></p>
+                <button onclick="location.reload()">Restart</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
