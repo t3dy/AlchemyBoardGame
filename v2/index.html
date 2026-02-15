@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solo Alchemy Lab v2.0</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;700&family=Metamorphous&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div id="game-container">
+        <!-- Sidebar: Stats and Workers -->
+        <aside id="sidebar-left">
+            <section id="stats">
+                <div class="stat-box">🪙 <span id="gold">5</span></div>
+                <div class="stat-box">📈 <span id="productivity">0</span></div>
+            </section>
+            <section id="tracks">
+                <div class="track-label">Reputation</div>
+                <div class="track-bar" id="reputation-bar" style="--val: 0%"></div>
+                <div class="track-label">Suspicion</div>
+                <div class="track-bar" id="suspicion-bar" style="--val: 0%"></div>
+            </section>
+            <section id="workers">
+                <h3>Meeples</h3>
+                <div id="meeples"></div>
+            </section>
+        </aside>
+
+        <!-- Center: Laboratory Board -->
+        <main id="board">
+            <header id="round-header">
+                <h1 id="round-display">Round 1</h1>
+                <h2 id="phase-display">PLACEMENT PHASE</h2>
+            </header>
+            <div id="lab-grid">
+                <!-- 3x3 Grid -->
+            </div>
+            <div id="inventory">
+                <h3>Inventory</h3>
+                <div id="inventory-list"></div>
+            </div>
+        </main>
+
+        <!-- Sidebar: Marketplace and Log -->
+        <aside id="sidebar-right">
+            <section id="shop">
+                <h3>Market City</h3>
+                <div id="tile-shop"></div>
+            </section>
+            <section id="game-log-panel">
+                <h3>Laboratory Log</h3>
+                <div id="card-display">
+                    <h4 id="card-title">Welcome</h4>
+                    <p id="card-text">Assign your workers to the lab tiles.</p>
+                </div>
+                <button id="resolve-btn">Resolve Round</button>
+            </section>
+        </aside>
+
+        <!-- Overlay -->
+        <div id="overlay" class="hidden">
+            <div id="overlay-content">
+                <h1 id="overlay-title"></h1>
+                <p id="overlay-message"></p>
+                <button onclick="location.reload()">Restart</button>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="js/engine.js"></script>
+</body>
+
+</html>

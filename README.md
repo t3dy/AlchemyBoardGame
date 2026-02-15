@@ -1,8 +1,19 @@
 # Solo Alchemy Lab
 
-[**🎮 Play the Game Live**](https://t3dy.github.io/AlchemyBoardGame/)
+## 🧪 Play the Evolution
 
-*Looking for the source code? [Browse files here](index.html)*
+Experience the development of the Alchemy Lab through its major versions:
+
+1.  **[Play Version 1.0 (Mobile Prototype)](v1.html)** - The original single-page experiment.
+2.  **[Play Version 2.0 (Spatial Research)](v2/index.html)** - Introduction of tile placement and worker assignments.
+3.  **[Play Version 3.0 (Board Game Engine)](v3/index.html)** - Transition to turn-based phases and narrator guidance.
+4.  **[Play Version 4.0 (Hazard Escalation)](index.html)** - Current version: Roles, 10-round curves, and Apprentice systems.
+
+---
+
+### [📄 Read the Design & Version History](VERSION_HISTORY.md)
+*Explore how each iteration better realized the vision of a tactical laboratory engine.*
+
 
 A single-page browser game prototype built with pure HTML, CSS, and Vanilla JavaScript.
 

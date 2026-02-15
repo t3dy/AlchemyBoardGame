@@ -5,21 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alchemy Lab v3.0 - Board Game Engine</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;700&family=Metamorphous&display=swap"
         rel="stylesheet">
 </head>
 
 <body class="v3">
     <div id="game-container">
-        <!-- Top Banner: Guidance & Narration -->
         <header id="narrator">
             <h2 id="phase-title">ACTION PHASE</h2>
             <p id="narrator-guidance">Select a worker, then click an empty furniture tile to place them.</p>
         </header>
-
         <main id="main-area">
-            <!-- Left Sidebar: Player Sheet -->
             <aside id="player-sheet">
                 <section class="stat-group">
                     <h3>🏦 Resources</h3>
@@ -35,54 +32,28 @@
                 </section>
                 <section class="stat-group">
                     <h3>👥 Alchemists</h3>
-                    <div id="worker-list">
-                        <!-- Workers listed here with their status colors -->
-                    </div>
+                    <div id="worker-list"></div>
                 </section>
             </aside>
-
-            <!-- Center Area: Laboratory Board -->
             <section id="board-area">
-                <div id="lab-board">
-                    <!-- Furniture Tiles as Action Spaces -->
-                </div>
+                <div id="lab-board"></div>
             </section>
-
-            <!-- Right Sidebar: Log & Deck -->
             <aside id="log-sidebar">
-                <section id="role-selection" class="hidden">
-                    <h3>🎭 Choose Role</h3>
-                    <div id="role-options"></div>
-                </section>
-
                 <section id="game-log-container">
                     <h3>📜 Laboratory Log</h3>
                     <div id="game-log"></div>
                 </section>
-
                 <section id="disaster-preview">
-                    <h3>⚠️ Hazard Watch</h3>
+                    <h3>⚠️ Disaster Warning</h3>
                     <div id="disaster-card" class="card-back"></div>
                     <div id="prevention-panel" class="hidden">
-                        <button id="prevent-btn">Mitigate</button>
+                        <button id="prevent-btn">Prevent</button>
                         <button id="suffer-btn">Suffer</button>
                     </div>
                 </section>
-
-                <section id="upgrade-panel" class="hidden">
-                    <h3>🛠️ Lab Expansion</h3>
-                    <div id="available-upgrades">
-                        <button onclick="window.gameEngine.buyUpgrade('fume_hood')">Fume Hood (3 Gold)</button>
-                        <button onclick="window.gameEngine.buyUpgrade('ventilation')">Shielding (2 Metal)</button>
-                    </div>
-                </section>
-
-                <button id="next-phase-btn">Advance Round</button>
+                <button id="next-phase-btn">Advance Phase</button>
             </aside>
-
         </main>
-
-        <!-- Overlays -->
         <div id="overlay" class="hidden">
             <div id="overlay-content">
                 <h1 id="overlay-title"></h1>
@@ -91,7 +62,6 @@
             </div>
         </div>
     </div>
-
     <script type="module" src="js/engine.js"></script>
 </body>
 

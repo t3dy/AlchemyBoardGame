@@ -1,0 +1,36 @@
+# 📜 Version History: The Alchemy Lab Evolution
+
+This document tracks the iterative design journey of the Alchemy Lab, showing how each version refined the mechanics to better realize the vision of a "tactical, high-pressure laboratory simulator."
+
+---
+
+## 🧪 Version 1.0: The Mobile Prototype
+**Goal**: Test basic interaction and resource loops.
+- **What we tried**: A single-column mobile interface where actions were "cards" drawn from a deck.
+- **Realization of Vision**: Established the core theme of balancing productivity vs. risk. 
+- **The Lesson**: The game lacked "place"—it was just a numbers engine. We needed a laboratory to manage.
+
+## 🔥 Version 2.0: The Furnace and the Stone
+**Goal**: Introduce spatial management and worker assignment.
+- **What we tried**: A 3x3 lab grid where players purchased furniture (tiles) and placed workers.
+- **Realization of Vision**: Added "Laboratory Management" as a core pillar. Introduced the balance between Reputation (VP) and Suspicion (Loss).
+- **The Lesson**: Random hazards felt too unpredictable. Without a round structure, it felt like a clicker game rather than a board game.
+
+## 📖 Version 3.0: The Board Game Engine
+**Goal**: Formalize rules and provide explicit player guidance.
+- **What we tried**: A rigid 5-phase round structure (Agricola-style) and the **Narrator System**—onscreen guidance to explain available moves.
+- **Realization of Vision**: The game became a "Board Game Engine." Health states (Green to Black) introduced bodily fragility as a resource.
+- **The Lesson**: While structured, it lacked a "crescendo." It was a survival game that didn't yet escalate in pressure.
+
+## 🌪️ Version 4.0: Hazard Escalation (Current)
+**Goal**: Implement high-stakes tactical depth and predictable pressure curves.
+- **What we tried**: 
+    - **Role Drafting**: Strategic asymmetry at the start of every round.
+    - **Tiered Hazards**: Minor/Major/Catastrophic disasters.
+    - **The 10-Round Curve**: Major accidents occur predictably every 3 rounds, allowing for preparation.
+    - **Apprentices & Trauma**: Permanent consequences for worker death.
+- **Realization of Vision**: This version fully realizes the "High-Pressure Simulator." It shifts from a random survival game to a tactical engine-builder where the player must decide when to "suffer" and when to "mitigate."
+
+---
+
+*Continue the experiment. Alchemy is a dance between ambition and fragility.*
