@@ -36,6 +36,14 @@ This document tracks the iterative design journey of the Alchemy Lab, showing ho
     - **Family Growth**: Build rooms to hire more alchemists.
 - **Realization of Vision**: This is the most "Agricola-like" version. It replaces random disasters with the crushing anxiety of subsistence. The laboratory now feels like a developing home that must be sustained.
 
+## ⚖️ Version 6.0: The Merchant of Secrets (Current)
+**Goal**: Incorporate Puerto Rico's "Select & Follow" roles and 17th-century chemical industries.
+- **What we tried**: 
+    - **Role Action System**: Picking a role (Guild Master, Merchant) triggers actions for everyone.
+    - **Historical Product Chains**: Creating Vermilion, Antimony pills, and Spirits of Salt.
+    - **The Rival AI**: A competing alchemist who follows your role selections.
+- **Realization of Vision**: Shifts the alchemist from a subsistence farmer to a specialized industry professional. The game is no longer just about survival, but about dominating the market for secret artistic and medicinal goods.
+
 ---
 
 *Continue the experiment. Alchemy is a dance between ambition and fragility.*

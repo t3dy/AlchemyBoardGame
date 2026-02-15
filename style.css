@@ -240,62 +240,106 @@ aside {
     background: rgba(0, 0, 0, 0.1);
 }
 
-/* Version 5.0: The Commons & Cards */
-#lab-board {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 15px;
-    padding: 10px;
-}
-
-.action-card {
-    background: white;
-    border: 2px solid var(--dark-border);
-    border-radius: 4px;
+/* Version 6.0: The Merchant of Secrets UI */
+#board-area {
     display: flex;
     flex-direction: column;
-    height: 120px;
-    cursor: pointer;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    transition: transform 0.1s;
+    gap: 30px;
 }
 
-.action-card:hover {
-    transform: scale(1.02);
+#lab-board {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.05);
+    border: 2px solid var(--dark-border);
+}
+
+.role-card {
+    background: white;
+    border: 3px solid var(--dark-border);
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+    box-shadow: 4px 4px 0px var(--dark-border);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.role-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--gold);
     border-color: var(--gold);
 }
 
-.action-card.occupied {
-    opacity: 0.6;
-    filter: grayscale(1);
-    cursor: not-allowed;
-    border-style: dashed;
+.role-icon {
+    font-size: 2.5rem;
 }
 
-.card-header {
-    background: var(--dark-border);
-    color: var(--parchment);
-    padding: 5px;
-    font-size: 0.9rem;
+.role-name {
     font-weight: bold;
-    text-align: center;
+    font-family: 'Metamorphous', cursive;
+    margin: 5px 0;
 }
 
-.card-body {
+#atelier-board {
     padding: 10px;
-    font-size: 0.8rem;
+    border-top: 2px dashed var(--dark-border);
+}
+
+.atelier-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.atelier-tile {
+    background: white;
+    border: 2px solid var(--dark-border);
+    padding: 10px;
     text-align: center;
-    flex-grow: 1;
+    font-size: 0.8rem;
+    box-shadow: 2px 2px 5px var(--shadow);
+}
+
+#build-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--parchment);
+    padding: 20px;
+    border: 8px double var(--dark-border);
+    z-index: 1000;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 0 50px black;
 }
 
-/* Log and Header Updates */
-#narrator {
-    border-bottom: 4px double var(--dark-border);
+#build-overlay button {
+    padding: 12px;
+    cursor: pointer;
+    font-family: 'Metamorphous', cursive;
+    background: var(--gold);
+    border: 2px solid var(--dark-border);
 }
 
+#inventory-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.inventory-item {
+    font-size: 0.9rem;
+    padding: 4px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
 
 #game-log {
     height: 300px;

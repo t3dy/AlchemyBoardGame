@@ -8,7 +8,8 @@ Experience the development of the Alchemy Lab through its major versions:
 2.  **[Play Version 2.0 (Spatial Research)](https://t3dy.github.io/AlchemyBoardGame/v2/index.html)**
 3.  **[Play Version 3.0 (Board Game Engine)](https://t3dy.github.io/AlchemyBoardGame/v3/index.html)**
 4.  **[Play Version 4.0 (Hazard Escalation)](https://t3dy.github.io/AlchemyBoardGame/v4/index.html)**
-5.  **[Play Version 5.0 (The Alchemist's Harvest)](https://t3dy.github.io/AlchemyBoardGame/index.html)**
+5.  **[Play Version 5.0 (The Alchemist's Harvest)](https://t3dy.github.io/AlchemyBoardGame/v5/index.html)**
+6.  **[Play Version 6.0 (The Merchant of Secrets)](https://t3dy.github.io/AlchemyBoardGame/index.html)**
 
 ---
 
