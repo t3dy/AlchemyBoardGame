@@ -22,14 +22,19 @@ This document tracks the iterative design journey of the Alchemy Lab, showing ho
 - **Realization of Vision**: The game became a "Board Game Engine." Health states (Green to Black) introduced bodily fragility as a resource.
 - **The Lesson**: While structured, it lacked a "crescendo." It was a survival game that didn't yet escalate in pressure.
 
-## 🌪️ Version 4.0: Hazard Escalation (Current)
+## 🌪️ Version 4.0: Hazard Escalation
 **Goal**: Implement high-stakes tactical depth and predictable pressure curves.
+- **What we tried**: Role Drafting, Tiered Hazards, and the 10-Round Pressure Curve.
+- **Realization of Vision**: Shifted focus to tactical preparation and mitigation.
+
+## 🧺 Version 5.0: The Alchemist's Harvest (Current)
+**Goal**: Achieve mechanical fidelity with the Agricola loop.
 - **What we tried**: 
-    - **Role Drafting**: Strategic asymmetry at the start of every round.
-    - **Tiered Hazards**: Minor/Major/Catastrophic disasters.
-    - **The 10-Round Curve**: Major accidents occur predictably every 3 rounds, allowing for preparation.
-    - **Apprentices & Trauma**: Permanent consequences for worker death.
-- **Realization of Vision**: This version fully realizes the "High-Pressure Simulator." It shifts from a random survival game to a tactical engine-builder where the player must decide when to "suffer" and when to "mitigate."
+    - **14-Round Stage Structure**: Card reveal every round.
+    - **Immediate Action Resolution**: Placing a worker provides resources instantly.
+    - **The Harvest (Autumn Audit)**: Predictable maintenance/feeding cost (Reagents).
+    - **Family Growth**: Build rooms to hire more alchemists.
+- **Realization of Vision**: This is the most "Agricola-like" version. It replaces random disasters with the crushing anxiety of subsistence. The laboratory now feels like a developing home that must be sustained.
 
 ---
 
