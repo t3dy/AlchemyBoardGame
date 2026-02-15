@@ -1,6 +1,8 @@
 # Solo Alchemy Lab
 
-[**Launch Game (index.html)**](index.html)
+[**🎮 Play the Game Live**](https://t3dy.github.io/AlchemyBoardGame/)
+
+*Looking for the source code? [Browse files here](index.html)*
 
 A single-page browser game prototype built with pure HTML, CSS, and Vanilla JavaScript.
 
