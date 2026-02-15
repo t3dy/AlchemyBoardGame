@@ -1,0 +1,380 @@
+:root {
+    --parchment: #f4e4bc;
+    --dark-border: #4a3728;
+    --ink: #2b1d12;
+    --gold: #d4af37;
+    --danger: #c62828;
+    --scholarly: #2e7d32;
+    --shadow: rgba(0, 0, 0, 0.2);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Crimson Pro', serif;
+    background-color: #1a1510;
+    color: var(--ink);
+    height: 100vh;
+    overflow: hidden;
+}
+
+#game-container {
+    background-color: var(--parchment);
+    background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Narrator / Guidance */
+#narrator {
+    background: var(--dark-border);
+    color: var(--parchment);
+    padding: 15px 30px;
+    text-align: center;
+    border-bottom: 5px double var(--gold);
+    box-shadow: 0 5px 15px black;
+}
+
+#phase-title {
+    font-family: 'Metamorphous', cursive;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+    color: var(--gold);
+}
+
+#narrator-guidance {
+    font-style: italic;
+    font-size: 1.2rem;
+}
+
+/* Layout Panels */
+#main-area {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 250px 1fr 300px;
+    overflow: hidden;
+}
+
+aside {
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.05);
+    border-right: 2px solid var(--dark-border);
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    overflow-y: auto;
+}
+
+#log-sidebar {
+    border-right: none;
+    border-left: 2px solid var(--dark-border);
+}
+
+/* Player Sheet */
+.stat-group h3 {
+    font-family: 'Metamorphous', cursive;
+    border-bottom: 2px solid var(--dark-border);
+    margin-bottom: 10px;
+}
+
+.stat {
+    font-size: 1.1rem;
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+#worker-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.worker-item {
+    border: 1px solid var(--dark-border);
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.worker-item.selected {
+    border: 3px solid var(--gold);
+    background: rgba(212, 175, 55, 0.2);
+}
+
+/* Status Colors */
+.status-green {
+    color: var(--scholarly);
+    font-weight: bold;
+}
+
+.status-yellow {
+    color: #827717;
+    font-weight: bold;
+}
+
+.status-red {
+    color: #b71c1c;
+    font-weight: bold;
+}
+
+.status-black {
+    color: #000;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* Board Area */
+#board-area {
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.05) 100%);
+}
+
+#lab-board {
+    display: grid;
+    grid-template-columns: repeat(3, 180px);
+    gap: 20px;
+}
+
+.action-space {
+    width: 180px;
+    height: 180px;
+    border: 3px solid var(--dark-border);
+    background: white;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    box-shadow: 4px 4px 10px var(--shadow);
+}
+
+.action-space:hover {
+    transform: translateY(-5px);
+    box-shadow: 6px 6px 15px var(--shadow);
+    border-color: var(--gold);
+}
+
+.action-space.occupied {
+    background: #e0e0e0;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.action-space.passive {
+    border-style: dashed;
+    cursor: default;
+}
+
+.action-emoji {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.action-name {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.action-desc {
+    font-size: 0.8rem;
+    margin-top: 5px;
+    opacity: 0.8;
+}
+
+.occupant-meeple {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    filter: drop-shadow(0 0 5px white);
+}
+
+/* Role Options */
+#role-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.role-card {
+    border: 2px solid var(--dark-border);
+    padding: 10px;
+    cursor: pointer;
+    background: white;
+    transition: 0.2s;
+}
+
+.role-card:hover {
+    border-color: var(--gold);
+    background: var(--parchment);
+}
+
+.role-card strong {
+    color: var(--gold);
+}
+
+#role-display {
+    font-weight: bold;
+    color: var(--gold);
+    border: 1px solid var(--dark-border);
+    padding: 2px 5px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+/* Version 5.0: The Commons & Cards */
+#lab-board {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+    padding: 10px;
+}
+
+.action-card {
+    background: white;
+    border: 2px solid var(--dark-border);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    height: 120px;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.1s;
+}
+
+.action-card:hover {
+    transform: scale(1.02);
+    border-color: var(--gold);
+}
+
+.action-card.occupied {
+    opacity: 0.6;
+    filter: grayscale(1);
+    cursor: not-allowed;
+    border-style: dashed;
+}
+
+.card-header {
+    background: var(--dark-border);
+    color: var(--parchment);
+    padding: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.card-body {
+    padding: 10px;
+    font-size: 0.8rem;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Log and Header Updates */
+#narrator {
+    border-bottom: 4px double var(--dark-border);
+}
+
+
+#game-log {
+    height: 300px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--dark-border);
+    padding: 10px;
+    font-size: 0.9rem;
+    overflow-y: auto;
+    font-family: monospace;
+}
+
+.log-entry {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 3px 0;
+}
+
+#disaster-card {
+    height: 180px;
+    border: 4px solid var(--dark-border);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    text-align: center;
+    background: #ccc;
+}
+
+.card-back {
+    background: repeating-linear-gradient(45deg, #4a3728, #4a3728 5px, #3a2718 5px, #3a2718 10px) !important;
+    color: white;
+}
+
+.card-revealed {
+    background: #ffecb3 !important;
+    border-color: var(--danger) !important;
+}
+
+#prevention-panel {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+#next-phase-btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 15px;
+    font-weight: bold;
+    font-family: 'Metamorphous', cursive;
+    background: var(--gold);
+    border: 2px solid var(--dark-border);
+    cursor: pointer;
+}
+
+#next-phase-btn:hover {
+    background: var(--dark-border);
+    color: var(--gold);
+}
+
+/* Overlays */
+#overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#overlay-content {
+    background: var(--parchment);
+    padding: 50px;
+    border: 10px double var(--dark-border);
+    text-align: center;
+}
+
+.hidden {
+    display: none !important;
+}

@@ -4,10 +4,11 @@
 
 Experience the development of the Alchemy Lab through its major versions:
 
-1.  **[Play Version 1.0 (Mobile Prototype)](v1.html)** - The original single-page experiment.
-2.  **[Play Version 2.0 (Spatial Research)](v2/index.html)** - Introduction of tile placement and worker assignments.
-3.  **[Play Version 3.0 (Board Game Engine)](v3/index.html)** - Transition to turn-based phases and narrator guidance.
-4.  **[Play Version 4.0 (Hazard Escalation)](index.html)** - Current version: Roles, 10-round curves, and Apprentice systems.
+1.  **[Play Version 1.0 (Mobile Prototype)](https://t3dy.github.io/AlchemyBoardGame/v1.html)**
+2.  **[Play Version 2.0 (Spatial Research)](https://t3dy.github.io/AlchemyBoardGame/v2/index.html)**
+3.  **[Play Version 3.0 (Board Game Engine)](https://t3dy.github.io/AlchemyBoardGame/v3/index.html)**
+4.  **[Play Version 4.0 (Hazard Escalation)](https://t3dy.github.io/AlchemyBoardGame/v4/index.html)**
+5.  **[Play Version 5.0 (The Alchemist's Harvest)](https://t3dy.github.io/AlchemyBoardGame/index.html)**
 
 ---
 
