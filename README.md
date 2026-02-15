@@ -1,5 +1,7 @@
 # Solo Alchemy Lab
 
+[**Launch Game (index.html)**](index.html)
+
 A single-page browser game prototype built with pure HTML, CSS, and Vanilla JavaScript.
 
 ## Setup
