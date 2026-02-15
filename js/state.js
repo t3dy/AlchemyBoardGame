@@ -1,39 +1,40 @@
 export class GameState {
     constructor() {
-        this.gold = 2;
-        this.ingredients = 2;
-        this.metals = 0;
-        this.reagents = 2; // Food equivalent
-        this.potions = 0;
+        this.gold = 5;
         this.victoryPoints = 0;
 
-        this.rooms = 2;
-        this.workers = [
-            { id: 'alc1', name: 'Alchemist A', state: 'stable' },
-            { id: 'alc2', name: 'Alchemist B', state: 'stable' }
-        ];
+        // Detailed History-accurate Inventory
+        this.inventory = {
+            mercury: 2,
+            sulfur: 2,
+            lead: 1,
+            antimony: 1,
+            vermilion: 0,
+            white_lead: 0,
+            antimony_pill: 0,
+            spirit_salt: 0
+        };
+
+        this.workshops = []; // List of workshop IDs owned
+
+        this.rival = {
+            gold: 5,
+            vp: 0,
+            inventory: { mercury: 1, sulfur: 1, vermilion: 0 },
+            workshops: ['alembic']
+        };
 
         this.round = 1;
-        this.maxRounds = 14;
-        this.phase = 'preparation'; // preparation, work, harvest, upkeep
+        this.maxRounds = 12;
+        this.phase = 'selection'; // selection, resolution
 
-        // Progressive Actions
-        this.revealedCards = [];
-        this.occupiedActions = new Set();
-
-        this.selectedWorkerIdx = null;
-        this.beggingCards = 0;
+        this.availableRoles = ['guildmaster', 'alchemist', 'merchant', 'patron', 'prospector'];
+        this.currentRole = null;
+        this.activeCommissions = [0, 1]; // Indices from data.js COMMISSIONS
     }
 
-    getMaintenanceCost() {
-        return this.workers.length * 2;
-    }
-
-    addWorker() {
-        if (this.workers.length < this.rooms) {
-            this.workers.push({ id: `alc${this.workers.length + 1}`, name: `Alchemist ${String.fromCharCode(65 + this.workers.length)}`, state: 'stable' });
-            return true;
-        }
-        return false;
+    addWorkshop(id, isRival = false) {
+        if (isRival) this.rival.workshops.push(id);
+        else this.workshops.push(id);
     }
 }

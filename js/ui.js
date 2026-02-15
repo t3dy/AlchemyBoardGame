@@ -1,4 +1,4 @@
-import { BASIC_ACTIONS, HEALTH_STATES } from './data.js';
+import { ROLES, PRODUCTS, WORKSHOPS, COMMISSIONS } from './data.js';
 
 export class UI {
     constructor(state) {
@@ -9,95 +9,109 @@ export class UI {
     initElements() {
         this.resEls = {
             gold: document.getElementById('res-gold'),
-            ingredients: document.getElementById('res-ingredients'),
-            metals: document.getElementById('res-metals'),
-            potions: document.getElementById('res-potions'),
-            reagents: document.getElementById('res-medicine'), // Mapping medicine UI to reagents
-            victory: document.getElementById('res-victory')
+            vp: document.getElementById('res-victory'),
+            rivalVp: document.getElementById('rival-vp-display') // New for v6
         };
-        this.workerList = document.getElementById('worker-list');
-        this.actionBoard = document.getElementById('lab-board'); // Reusing ID for The Commons
+        this.invContainer = document.getElementById('inventory-list');
+        this.roleBoard = document.getElementById('lab-board');
+        this.atelierBoard = document.getElementById('atelier-board') || this.createAtelierBoard();
         this.narratorTitle = document.getElementById('phase-title');
         this.narratorPrompt = document.getElementById('narrator-guidance');
         this.gameLog = document.getElementById('game-log');
     }
 
+    createAtelierBoard() {
+        const board = document.createElement('div');
+        board.id = 'atelier-board';
+        document.getElementById('board-area').appendChild(board);
+        return board;
+    }
+
     renderAll() {
         this.renderResources();
-        this.renderWorkers();
-        this.renderCommons();
+        this.renderInventory();
+        this.renderRoles();
+        this.renderAteliers();
         this.updateNarrator();
     }
 
     renderResources() {
         this.resEls.gold.innerText = this.state.gold;
-        this.resEls.ingredients.innerText = this.state.ingredients;
-        this.resEls.metals.innerText = this.state.metals;
-        this.resEls.potions.innerText = this.state.potions;
-        this.resEls.reagents.innerText = this.state.reagents;
-        this.resEls.victory.innerText = this.state.victoryPoints;
+        this.resEls.vp.innerText = this.state.victoryPoints;
     }
 
-    renderWorkers() {
-        this.workerList.innerHTML = '';
-        const workersAtHome = this.state.workers.length - this.state.occupiedActions.size;
-
-        for (let i = 0; i < this.state.workers.length; i++) {
+    renderInventory() {
+        this.invContainer.innerHTML = '';
+        Object.entries(this.state.inventory).forEach(([id, amt]) => {
+            if (amt <= 0 && PRODUCTS[id].type === 'fine') return;
             const div = document.createElement('div');
-            div.className = 'worker-item';
-            div.innerHTML = `<span style="font-size: 1.5rem">👨‍🔬</span> <div>Alchemist ${i + 1}</div>`;
-            if (i >= this.state.workers.length - workersAtHome) {
-                div.style.border = '2px solid var(--gold)';
-            } else {
-                div.style.opacity = '0.5';
-                div.innerHTML += ' <small>(At Work)</small>';
-            }
-            this.workerList.appendChild(div);
-        }
+            div.className = 'inventory-item';
+            div.innerHTML = `<span>${PRODUCTS[id].emoji}</span> ${PRODUCTS[id].name}: <strong>${amt}</strong>`;
+            this.invContainer.appendChild(div);
+        });
     }
 
-    renderCommons() {
-        this.actionBoard.innerHTML = '';
-
-        // Basic Actions
-        BASIC_ACTIONS.forEach(action => this.createActionCard(action));
-
-        // Revealed Round Cards
-        this.state.revealedCards.forEach(action => this.createActionCard(action));
+    renderRoles() {
+        this.roleBoard.innerHTML = '';
+        this.state.availableRoles.forEach(roleId => {
+            const role = ROLES[roleId];
+            const div = document.createElement('div');
+            div.className = 'role-card';
+            div.innerHTML = `
+                <div class="role-icon">${role.icon}</div>
+                <div class="role-name">${role.name}</div>
+                <small>${role.desc}</small>
+            `;
+            div.onclick = () => window.gameEngine.selectRole(roleId);
+            this.roleBoard.appendChild(div);
+        });
     }
 
-    createActionCard(action) {
-        const div = document.createElement('div');
-        const isOccupied = this.state.occupiedActions.has(action.id);
-        div.className = `action-card ${isOccupied ? 'occupied' : ''}`;
-        div.innerHTML = `
-            <div class="card-header">${action.emoji} ${action.name}</div>
-            <div class="card-body">${action.description}</div>
-        `;
-        if (!isOccupied) div.onclick = () => window.gameEngine.selectAction(action.id);
-        this.actionBoard.appendChild(div);
+    renderAteliers() {
+        this.atelierBoard.innerHTML = '<h3>🏗️ Your Workshop Ateliers</h3>';
+        const container = document.createElement('div');
+        container.className = 'atelier-grid';
+
+        this.state.workshops.forEach(wsId => {
+            const data = WORKSHOPS[wsId];
+            const div = document.createElement('div');
+            div.className = 'atelier-tile';
+            div.innerHTML = `<span>${data.emoji}</span><br><strong>${data.name}</strong>`;
+            container.appendChild(div);
+        });
+        this.atelierBoard.appendChild(container);
+    }
+
+    showBuildPanel(privilege) {
+        const panel = document.createElement('div');
+        panel.id = 'build-overlay';
+        panel.innerHTML = '<h3>Guild Master: Build Workshop</h3>';
+        Object.values(WORKSHOPS).forEach(ws => {
+            const btn = document.createElement('button');
+            const cost = Math.max(0, ws.cost - (privilege ? 1 : 0));
+            btn.innerHTML = `${ws.emoji} ${ws.name} (${cost} Gold)`;
+            btn.onclick = () => {
+                window.gameEngine.buyWorkshop(ws.id, privilege);
+                panel.remove();
+            };
+            panel.appendChild(btn);
+        });
+        document.body.appendChild(panel);
     }
 
     updateNarrator() {
-        const maintenance = this.state.getMaintenanceCost();
-        this.narratorTitle.innerText = `ROUND ${this.state.round}: ${this.state.phase.toUpperCase()}`;
-
-        if (this.state.phase === 'work') {
-            this.narratorPrompt.innerText = `Work Phase: Place your alchemists on action cards. Next Harvest in Round ${this.getNextHarvest()}. Total Reagents needed: ${maintenance}.`;
-        } else if (this.state.phase === 'harvest') {
-            this.narratorPrompt.innerText = "Harvest Phase: Feeding Alchemists and gathering field yields.";
+        this.narratorTitle.innerText = `R${this.state.round}: ${this.state.phase.toUpperCase()}`;
+        if (this.state.phase === 'selection') {
+            this.narratorPrompt.innerText = "Choose a guild role. Everyone follows, but you get the Privilege bonus.";
+        } else {
+            this.narratorPrompt.innerText = "Resolving the current specialized activity...";
         }
-    }
-
-    getNextHarvest() {
-        const harvestRounds = [4, 7, 9, 11, 13, 14];
-        return harvestRounds.find(r => r >= this.state.round) || 14;
     }
 
     log(message) {
         const entry = document.createElement('div');
         entry.className = 'log-entry';
-        entry.innerHTML = `[R${this.state.round}] ${message}`;
+        entry.innerHTML = message;
         this.gameLog.prepend(entry);
     }
 
