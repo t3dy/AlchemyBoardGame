@@ -1,306 +1,129 @@
 import { GameState } from './state.js';
 import { UI } from './ui.js';
-import { FURNITURE, HEALTH_STATES, DISASTERS, ROLES } from './data.js';
+import { BASIC_ACTIONS, ROUND_CARDS, HARVEST_ROUNDS, HEALTH_STATES } from './data.js';
 
 class Engine {
     constructor() {
         this.state = new GameState();
         this.ui = new UI(this.state);
-        this.initEventListeners();
-        this.setupNewRound();
+        this.init();
+        this.startRound();
+    }
+
+    init() {
+        document.getElementById('next-phase-btn').onclick = () => this.advancePhase();
         this.ui.renderAll();
     }
 
-    shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-    }
+    startRound() {
+        this.state.phase = 'preparation';
+        this.state.occupiedActions.clear();
 
-    initEventListeners() {
-        document.getElementById('next-phase-btn').onclick = () => this.nextPhase();
-        document.getElementById('prevent-btn').onclick = () => this.handleDisasterChoice(true);
-        document.getElementById('suffer-btn').onclick = () => this.handleDisasterChoice(false);
-    }
+        // Reveal new action card
+        const newCard = ROUND_CARDS.find(c => c.round === this.state.round);
+        if (newCard) this.state.revealedCards.push(newCard);
 
-    setupNewRound() {
-        this.state.phase = 'role';
-        this.ui.log(`--- Round ${this.state.round} ---`);
-        this.renderRoleSelection();
-    }
-
-    renderRoleSelection() {
-        const container = document.getElementById('role-options');
-        const section = document.getElementById('role-selection');
-        section.classList.remove('hidden');
-        container.innerHTML = '';
-
-        Object.entries(ROLES).forEach(([id, role]) => {
-            const div = document.createElement('div');
-            div.className = 'role-card';
-            div.innerHTML = `<strong>${role.icon} ${role.name}</strong><br><small>${role.benefit}</small>`;
-            div.onclick = () => this.selectRole(id);
-            container.appendChild(div);
-        });
-    }
-
-    selectRole(roleId) {
-        this.state.role = roleId;
-        this.ui.log(`Selected Role: ${ROLES[roleId].name}`);
-        document.getElementById('role-selection').classList.add('hidden');
-        this.nextPhase();
-    }
-
-    selectWorker(index) {
-        if (this.state.phase !== 'action') {
-            if (this.state.phase === 'recovery') this.handleHealing(index);
-            return;
-        }
-
-        const worker = this.state.workers[index];
-        const health = HEALTH_STATES[worker.state];
-        const isAssigned = this.state.furniture.some(f => f.occupant === index);
-
-        if (!health.canWork) {
-            alert(`${worker.name} is too injured to work!`);
-            return;
-        }
-        if (isAssigned) {
-            alert(`${worker.name} is already at a workstation.`);
-            return;
-        }
-
-        this.state.selectedWorkerIdx = index;
-        this.ui.log(`Placing ${worker.name}. Select a workstation.`);
+        this.ui.log(`--- Round ${this.state.round} Begins ---`);
+        this.state.phase = 'work';
         this.ui.renderAll();
     }
 
-    assignWorkerToSlot(slotIdx) {
-        if (this.state.phase !== 'action' || this.state.selectedWorkerIdx === null) return;
-
-        const slot = this.state.furniture[slotIdx];
-        if (slot.occupant !== null) {
-            alert("This workstation is already occupied.");
+    selectAction(actionId) {
+        if (this.state.phase !== 'work') return;
+        if (this.state.occupiedActions.has(actionId)) {
+            alert("This action is already taken this round!");
             return;
         }
 
-        slot.occupant = this.state.selectedWorkerIdx;
-        this.ui.log(`${this.state.workers[this.state.selectedWorkerIdx].name} assigned to ${FURNITURE[slot.typeId].name}.`);
-        this.state.selectedWorkerIdx = null;
+        const availableWorkers = this.state.workers.filter((w, idx) => !this.isWorkerPlaced(idx));
+        if (availableWorkers.length === 0) {
+            alert("All alchemists are currently busy.");
+            return;
+        }
+
+        // Place the first available worker
+        const workerIdx = this.state.workers.findIndex((w, idx) => !this.isWorkerPlaced(idx));
+        this.performAction(actionId, workerIdx);
+    }
+
+    isWorkerPlaced(idx) {
+        // Simple internal check: since actions are immediate in v5, we just track occupied slots
+        // and decrement available actions. Real Agricola tracks which worker went where.
+        return false; // placeholder for simpler logic below
+    }
+
+    performAction(actionId, workerIdx) {
+        const action = [...BASIC_ACTIONS, ...this.state.revealedCards].find(a => a.id === actionId);
+        if (!action) return;
+
+        this.state.occupiedActions.add(actionId);
+        this.executeImmediateEffect(actionId);
+
+        this.ui.log(`Action: ${action.name} performed.`);
+
+        // Check if round over
+        if (this.state.occupiedActions.size >= this.state.workers.length) {
+            this.ui.log("Work Phase Complete. Returning home...");
+        }
+
         this.ui.renderAll();
     }
 
-    nextPhase() {
-        const order = ['role', 'action', 'production', 'hazard_minor', 'hazard_major', 'recovery', 'upgrade', 'scoring'];
-        let curr = order.indexOf(this.state.phase);
+    executeImmediateEffect(id) {
+        switch (id) {
+            case 'gather_ash': this.state.ingredients += 1; break;
+            case 'gather_gold': this.state.gold += 1; break;
+            case 'reagent_mix': this.state.reagents += 1; break;
+            case 'extra_workbench': this.state.ingredients += 3; break;
+            case 'expansion': this.state.rooms += 1; break;
+            case 'hiring': this.state.addWorker(); break;
+            case 'stable_distill': this.state.potions += 2; break;
+            case 'industrial_alembic': this.state.metals += 2; break;
+        }
+    }
 
-        // Prevent accidental advancement during specific phases
-        if (this.state.phase === 'role' && !this.state.role) return;
-
-        this.state.phase = order[(curr + 1) % order.length];
-
-        if (this.state.phase === 'role') {
-            if (this.state.round >= this.state.maxRounds) {
-                this.resolveVictory();
-                return;
+    advancePhase() {
+        if (this.state.phase === 'work') {
+            if (HARVEST_ROUNDS.includes(this.state.round)) {
+                this.startHarvest();
+            } else {
+                this.endRound();
             }
-            this.state.round++;
-            this.state.resetOccupants();
-            this.state.role = null;
-            this.ui.hideDisaster();
-            this.setupNewRound();
-        }
-
-        this.processPhase();
-        this.ui.renderAll();
-    }
-
-    processPhase() {
-        switch (this.state.phase) {
-            case 'production':
-                this.resolveProduction();
-                break;
-            case 'hazard_minor':
-                this.drawHazard('minor');
-                break;
-            case 'hazard_major':
-                if (this.state.round % 3 === 0) {
-                    this.drawHazard('major');
-                } else {
-                    this.ui.log("Safety Check: No major accidents this round.");
-                    this.nextPhase();
-                }
-                break;
-            case 'upgrade':
-                document.getElementById('upgrade-panel').classList.remove('hidden');
-                break;
-            case 'scoring':
-                document.getElementById('upgrade-panel').classList.add('hidden');
-                this.resolveScoring();
-                break;
+        } else if (this.state.phase === 'harvest') {
+            this.endRound();
         }
     }
 
-    resolveProduction() {
-        let safetyCount = this.state.furniture.filter(f => FURNITURE[f.typeId].category === 'safety').length;
-        let bonus = safetyCount >= 3 ? 1 : 0; // Well-Regulated Lab bonus
-        if (bonus) this.ui.log("WELL-REGULATED LAB: +1 productivity bonus applied.");
+    startHarvest() {
+        this.state.phase = 'harvest';
+        this.ui.log("AUTUMN AUDIT: Time to maintain the laboratory.");
 
-        this.state.furniture.forEach(f => {
-            if (f.occupant === null) return;
-            const worker = this.state.workers[f.occupant];
-            const hStatus = HEALTH_STATES[worker.state];
-            this.resolveActionEffect(f.typeId, hStatus.bonus + bonus);
-        });
-    }
-
-    resolveActionEffect(typeId, bonus) {
-        let msg = "";
-        const role = this.state.role;
-
-        switch (typeId) {
-            case 'workbench':
-                const ing = Math.max(0, 2 + bonus + (role === 'industrialist' ? 1 : 0));
-                this.state.ingredients += ing;
-                msg = `Produced ${ing} Ingredients.`;
-                break;
-            case 'alembic':
-                if (this.state.gold >= 1) {
-                    this.state.gold -= 1; this.state.metals += 1;
-                    msg = "Refined 1 Metal.";
-                }
-                break;
-            case 'crucible':
-                if (this.state.ingredients >= 2 && this.state.metals >= 1) {
-                    this.state.ingredients -= 2; this.state.metals -= 1;
-                    const pot = 1 + (role === 'brewer' ? 1 : 0);
-                    this.state.potions += pot;
-                    msg = `Crafted ${pot} Potions.`;
-                } else if (this.state.ingredients >= 1 && this.state.gold >= 1) {
-                    this.state.ingredients -= 1; this.state.gold -= 1;
-                    this.state.medicine += 1;
-                    msg = "Crafted 1 Medicine.";
-                }
-                break;
-            case 'research':
-                const vp = 1 + (role === 'scholar' ? 1 : 0);
-                this.state.victoryPoints += vp;
-                msg = `Gained ${vp} Victory Points.`;
-                break;
-        }
-        if (msg) this.ui.log(`${FURNITURE[typeId].name}: ${msg}`);
-    }
-
-    drawHazard(tier) {
-        const deck = DISASTERS[tier];
-        const card = deck[Math.floor(Math.random() * deck.length)];
-
-        // Planning mitigation?
-        if (this.state.role === 'planner' && tier === 'major') {
-            this.ui.log("PLANNER ABILITY: Downgrading Major hazard to Minor.");
-            this.drawHazard('minor');
-            return;
-        }
-
-        this.state.activeDisaster = card;
-        this.ui.showDisaster(card);
-    }
-
-    handleDisasterChoice(prevent) {
-        const d = this.state.activeDisaster;
-        if (prevent) {
-            if (this.canAfford(d.cost)) {
-                this.deductCost(d.cost);
-                this.ui.log(`MITIGATED: ${d.title}.`);
-                this.nextPhase();
-            } else { alert("Cannot afford mitigation!"); }
+        const cost = this.state.getMaintenanceCost();
+        if (this.state.reagents >= cost) {
+            this.state.reagents -= cost;
+            this.ui.log(`Paid ${cost} Reagents to maintain ${this.state.workers.length} Alchemists.`);
         } else {
-            this.applyDisaster(d);
-            this.nextPhase();
+            const shortage = cost - this.state.reagents;
+            this.state.reagents = 0;
+            this.state.beggingCards += shortage;
+            this.state.victoryPoints -= (shortage * 3);
+            this.ui.log(`CRITICAL SHORTAGE: Took ${shortage} Begging penalties.`);
         }
-    }
-
-    canAfford(cost) {
-        if (!cost) return true;
-        if (cost.gold && this.state.gold < cost.gold) return false;
-        if (cost.ingredient && this.state.ingredients < cost.ingredient) return false;
-        if (cost.metal && this.state.metals < cost.metal) return false;
-        if (cost.medicine && this.state.medicine < cost.medicine) return false;
-        return true;
-    }
-
-    deductCost(cost) {
-        if (!cost) return;
-        if (cost.gold) this.state.gold -= cost.gold;
-        if (cost.ingredient) this.state.ingredients -= cost.ingredient;
-        if (cost.metal) this.state.metals -= cost.metal;
-        if (cost.medicine) this.state.medicine -= cost.medicine;
-    }
-
-    applyDisaster(d) {
-        this.ui.log(`SUFFERED: ${d.title}. consequence: ${d.effect}`);
-        if (d.impact.type === 'injury') {
-            const w = this.state.workers[Math.floor(Math.random() * this.state.workers.length)];
-            w.state = d.impact.to;
-            if (w.state === 'black') this.checkWorkerDeath(w);
-        }
-        if (d.impact.type === 'stat' && d.impact.target === 'all') {
-            this.state.workers.forEach(w => w.state = d.impact.to);
-        }
-    }
-
-    checkWorkerDeath(worker) {
-        // In Upkeep/Scoring we check for Critical states. 
-        // If a worker stays Critical through Upkeep, they are replaced by an Apprentice.
-    }
-
-    handleHealing(index) {
-        const worker = this.state.workers[index];
-        const states = ['black', 'red', 'yellow', 'green'];
-        let currIdx = states.indexOf(worker.state);
-        if (currIdx === states.length - 1) return;
-
-        if (this.state.medicine >= 1) {
-            this.state.medicine--;
-            worker.state = states[currIdx + 1];
-            this.ui.log(`HEALED: ${worker.name} is now ${worker.state.toUpperCase()}.`);
-        } else if (this.state.potions >= 1) {
-            this.state.potions--;
-            worker.state = states[currIdx + 1];
-            this.ui.log(`RECOVERED: ${worker.name} used Potion. Now ${worker.state.toUpperCase()}.`);
-        } else { alert("Need Medicine/Potions!"); }
         this.ui.renderAll();
     }
 
-    buyUpgrade(typeId) {
-        const data = FURNITURE[typeId];
-        if (this.state.gold >= 3) {
-            this.state.gold -= 3;
-            this.state.furniture.push({ slot: this.state.furniture.length, typeId: typeId, occupant: null });
-            this.ui.log(`EXPANSION: ${data.name} built.`);
-            this.ui.renderAll();
-        } else { alert("Insufficient Gold!"); }
-    }
-
-    resolveScoring() {
-        // Critical Worker Death Check
-        this.state.workers.forEach((w, idx) => {
-            if (w.state === 'black') {
-                this.ui.log(`TRAGEDY: ${w.name} has passed away.`);
-                this.state.addTrauma();
-                this.state.workers[idx] = { id: `apr${Date.now()}`, name: `Apprentice ${idx + 1}`, state: 'trauma', isApprentice: true };
-            }
-        });
-
-        if (this.state.round === 10) {
-            this.ui.log("GRAND EXPERIMENT: Final scoring calculation...");
+    endRound() {
+        if (this.state.round >= this.state.maxRounds) {
+            this.resolveVictory();
+            return;
         }
+        this.state.round++;
+        this.startRound();
     }
 
     resolveVictory() {
-        const score = this.state.victoryPoints + (this.state.potions * 2);
-        this.ui.showOverlay("End of Round 10", `Final Laboratory Value: ${score} VP. ${this.state.traumaTokens} casualties recorded.`);
+        const score = this.state.victoryPoints + (this.state.potions * 2) + (this.state.rooms);
+        this.ui.showOverlay("End of Round 14", `Final Score: ${score} VP. Begging penalties: ${this.state.beggingCards}`);
     }
 }
 

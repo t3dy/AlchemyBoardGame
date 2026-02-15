@@ -240,7 +240,62 @@ aside {
     background: rgba(0, 0, 0, 0.1);
 }
 
-/* Log and Disaster */
+/* Version 5.0: The Commons & Cards */
+#lab-board {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+    padding: 10px;
+}
+
+.action-card {
+    background: white;
+    border: 2px solid var(--dark-border);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    height: 120px;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.1s;
+}
+
+.action-card:hover {
+    transform: scale(1.02);
+    border-color: var(--gold);
+}
+
+.action-card.occupied {
+    opacity: 0.6;
+    filter: grayscale(1);
+    cursor: not-allowed;
+    border-style: dashed;
+}
+
+.card-header {
+    background: var(--dark-border);
+    color: var(--parchment);
+    padding: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.card-body {
+    padding: 10px;
+    font-size: 0.8rem;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Log and Header Updates */
+#narrator {
+    border-bottom: 4px double var(--dark-border);
+}
+
 
 #game-log {
     height: 300px;

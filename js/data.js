@@ -1,43 +1,39 @@
-export const ROLES = {
-    brewer: { id: 'brewer', name: "Potion Brewer", benefit: "+1 Potion on Crucible success", icon: "🧪" },
-    planner: { id: 'planner', name: "Emergency Planner", benefit: "Downgrade 1 Disaster severity level", icon: "📋" },
-    industrialist: { id: 'industrialist', name: "Industrialist", benefit: "+1 Ingredient on Workbench success", icon: "🏭" },
-    scholar: { id: 'scholar', name: "Scholar", benefit: "+1 VP every Research action", icon: "🎓" }
-};
+export const ROUND_CARDS = [
+    { round: 1, id: 'extra_workbench', name: "Expand Workbench", emoji: "⚒️", description: "Gain +3 Ingredients", type: 'action' },
+    { round: 2, id: 'hiring', name: "Hiring Fair", emoji: "🤝", description: "Add 1 Alchemist (Requires Room)", type: 'action' },
+    { round: 3, id: 'stable_distill', name: "Stable Distillation", emoji: "🧪", description: "Craft 2 Potions", type: 'action' },
+    { round: 4, id: 'expansion', name: "Build Laboratory Room", emoji: "🏠", description: "Add space for 1 Alchemist", type: 'action' },
+    { round: 5, id: 'special_order', name: "Special Order", emoji: "📜", description: "Earn 3 VP immediately", type: 'action' },
+    { round: 6, id: 'industrial_alembic', name: "Industrial Alembic", emoji: "⚗️", description: "Refine 2 Metals", type: 'action' },
+    { round: 7, id: 'mass_production', name: "Mass Production", emoji: "🏭", description: "Produce +5 Ingredients", type: 'action' },
+    { round: 8, id: 'renovation', name: "Premium Renovation", emoji: "✨", description: "Upgrade 1 Room to Stone", type: 'action' },
+    { round: 9, id: 'master_study', name: "Master's Study", emoji: "📖", description: "Earn 1 VP for every 2 Potions", type: 'action' },
+    { round: 10, id: 'apprentice_program', name: "Apprentice Program", emoji: "👨‍🎓", description: "Add 1 Alchemist instantly", type: 'action' },
+    { round: 11, id: 'grand_furnace', name: "The Grand Furnace", emoji: "🔥", description: "Refine 3 Metals", type: 'action' },
+    { round: 12, id: 'royal_commission', name: "Royal Commission", emoji: "👑", description: "Earn 5 VP", type: 'action' },
+    { round: 13, id: 'emergency_reagents', name: "Emergency Reagents", emoji: "⚕️", description: "Gain 3 Reagents", type: 'action' },
+    { round: 14, id: 'magnum_opus', name: "The Magnum Opus", emoji: "💎", description: "Earn 10 VP", type: 'action' }
+];
+
+export const BASIC_ACTIONS = [
+    { id: 'gather_ash', name: "Gather Ash", emoji: "💨", description: "Gain 1 Ingredient", type: 'action' },
+    { id: 'gather_gold', name: "Earn Wages", emoji: "🪙", description: "Gain 1 Gold", type: 'action' },
+    { id: 'reagent_mix', name: "Mix Reagents", emoji: "⚕️", description: "Gain 1 Reagent (Food)", type: 'action' },
+    { id: 'plow_bench', name: "Clear Bench", emoji: "🧹", description: "Gain 1 Lab Slot", type: 'action' }
+];
+
+export const HARVEST_ROUNDS = [4, 7, 9, 11, 13, 14];
 
 export const FURNITURE = {
-    crucible: { id: 'crucible', name: "Crucible", emoji: "🥣", description: "Craft Potion/Medicine", type: 'action', category: 'production' },
-    alembic: { id: 'alembic', name: "Alembic", emoji: "⚗️", description: "Refine Metals", type: 'action', category: 'production' },
-    workbench: { id: 'workbench', name: "Workbench", emoji: "⚒️", description: "Gain Ingredients", type: 'action', category: 'production' },
-    research: { id: 'research', name: "Research Desk", emoji: "📜", description: "Advanced Crafting / VP", type: 'action', category: 'research' },
-    fume_hood: { id: 'fume_hood', name: "Fume Hood", emoji: "🌬️", description: "Blocks Sickened results", type: 'passive', category: 'safety' },
-    safety_shower: { id: 'safety_shower', name: "Safety Shower", emoji: "🚿", description: "Blocks Acid results", type: 'passive', category: 'safety' },
-    ventilation: { id: 'ventilation', name: "Ventilation", emoji: "🌪️", description: "Blocks Gas results", type: 'passive', category: 'safety' }
-};
-
-export const DISASTERS = {
-    minor: [
-        { id: 'spill', title: "Minor Spill", effect: "Random worker → Sickened.", impact: { type: 'injury', to: 'yellow' }, cost: { ingredient: 1 } },
-        { id: 'fumes', title: "Stray Fumes", effect: "Random worker → Sickened.", impact: { type: 'injury', to: 'yellow' }, passiveBlock: 'fume_hood' }
-    ],
-    major: [
-        { id: 'explosion', title: "Laboratory Explosion", effect: "Random worker → Injured.", impact: { type: 'injury', to: 'red' }, cost: { gold: 2 } },
-        { id: 'gas_leak', title: "Chlorine Leak", effect: "All workers → Sickened.", impact: { type: 'stat', target: 'all', to: 'yellow' }, passiveBlock: 'ventilation' }
-    ],
-    catastrophic: [
-        { id: 'critical_failure', title: "Systemic Collapse", effect: "Random worker → Critical.", impact: { type: 'injury', to: 'black' }, cost: { medicine: 1 } },
-        { id: 'containment_breach', title: "Toxic Breach", effect: "All workers → Injured.", impact: { type: 'stat', target: 'all', to: 'red' }, cost: { gold: 5 } }
-    ]
+    room: { id: 'room', name: "Lab Room", emoji: "🏠", cost: { wood: 2 }, category: 'housing' },
+    workbench: { id: 'workbench', name: "Workbench", emoji: "⚒️", category: 'production' },
+    alembic: { id: 'alembic', name: "Alembic", emoji: "⚗️", category: 'production' },
+    crucible: { id: 'crucible', name: "Crucible", emoji: "🥣", category: 'production' }
 };
 
 export const HEALTH_STATES = {
-    green: { id: 'green', name: 'Healthy', emoji: '🟢', canWork: true, bonus: 0 },
-    yellow: { id: 'yellow', name: 'Sickened', emoji: '🟡', canWork: true, bonus: -1 },
-    red: { id: 'red', name: 'Injured', emoji: '🔴', canWork: false, bonus: 0 },
-    black: { id: 'black', name: 'Critical', emoji: '💀', canWork: false, bonus: 0 },
-    trauma: { id: 'trauma', name: 'Traumatized', emoji: '🌑', canWork: true, bonus: -2 } // Applied to Apprentices
+    vibrant: { id: 'vibrant', name: 'Vibrant', emoji: '✨', canWork: true },
+    stable: { id: 'stable', name: 'Stable', emoji: '🟢', canWork: true },
+    fatigued: { id: 'fatigued', name: 'Fatigued', emoji: '🟡', canWork: true },
+    hungry: { id: 'hungry', name: 'Starving', emoji: '💀', canWork: false }
 };
-
-export function getFurnitureData(id) { return FURNITURE[id]; }
-export function getHealthData(id) { return HEALTH_STATES[id]; }
-export function getRoleData(id) { return ROLES[id]; }

@@ -1,43 +1,39 @@
 export class GameState {
     constructor() {
-        this.gold = 5;
-        this.ingredients = 3;
-        this.metals = 1;
-        this.medicine = 1;
+        this.gold = 2;
+        this.ingredients = 2;
+        this.metals = 0;
+        this.reagents = 2; // Food equivalent
         this.potions = 0;
         this.victoryPoints = 0;
 
-        this.role = null; // selected in Phase 1
-
+        this.rooms = 2;
         this.workers = [
-            { id: 'alc1', name: 'Alchemist A', state: 'green', isApprentice: false },
-            { id: 'alc2', name: 'Alchemist B', state: 'green', isApprentice: false }
-        ];
-
-        this.furniture = [
-            { slot: 0, typeId: 'crucible', occupant: null },
-            { slot: 1, typeId: 'alembic', occupant: null },
-            { slot: 2, typeId: 'workbench', occupant: null },
-            { slot: 3, typeId: 'research', occupant: null }
-            // Safety tiles added via expansion actions later
+            { id: 'alc1', name: 'Alchemist A', state: 'stable' },
+            { id: 'alc2', name: 'Alchemist B', state: 'stable' }
         ];
 
         this.round = 1;
-        this.maxRounds = 10;
-        this.phase = 'role'; // role, action, production, hazard_minor, hazard_major, recovery, upgrade, scoring
+        this.maxRounds = 14;
+        this.phase = 'preparation'; // preparation, work, harvest, upkeep
 
-        this.activeDisaster = null;
+        // Progressive Actions
+        this.revealedCards = [];
+        this.occupiedActions = new Set();
+
         this.selectedWorkerIdx = null;
-        this.traumaTokens = 0;
+        this.beggingCards = 0;
     }
 
-    resetOccupants() {
-        this.furniture.forEach(f => f.occupant = null);
-        this.selectedWorkerIdx = null;
+    getMaintenanceCost() {
+        return this.workers.length * 2;
     }
 
-    addTrauma() {
-        this.traumaTokens++;
-        this.victoryPoints = Math.max(0, this.victoryPoints - 2);
+    addWorker() {
+        if (this.workers.length < this.rooms) {
+            this.workers.push({ id: `alc${this.workers.length + 1}`, name: `Alchemist ${String.fromCharCode(65 + this.workers.length)}`, state: 'stable' });
+            return true;
+        }
+        return false;
     }
 }
